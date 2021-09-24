@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %} 
+<h1>EXAMINER HOME PAGE</h1>
+<h2>Hi {{ user.get_username }}</h2>
+<br>
+<h2>Your subjects:</h2>
+{% for subject in subject_list %}
+    <button>{{ subject.subject_name }}</button><br>
+{% endfor %}
+<br>
+<br>
+<a href={% url 'add_subject' %}><button>Add new subject</button></a>
+{% endblock %}

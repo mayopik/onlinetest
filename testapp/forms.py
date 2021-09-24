@@ -4,7 +4,7 @@ from testapp import models
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from testapp.models import Student
+from testapp.models import Student, Subject
 
 class StudentRegistrationForm(forms.ModelForm):
     class Meta:
@@ -29,3 +29,13 @@ class RegistrationForm(UserCreationForm):
         if commit:
         	user.save()
         return user
+
+class LoginForm(forms.Form):
+    username=forms.CharField(max_length=150, label="Username/Roll.No")
+    password=forms.CharField(widget=forms.PasswordInput())
+
+class AddSubjectForm(forms.ModelForm):
+    class Meta:
+        model=Subject
+        fields=('subject_name', 'subject_code')
+        labels={'subject_name':'Name of subject', 'subject_code':'Subject Code'}
