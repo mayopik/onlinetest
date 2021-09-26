@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, AddSubjectForm, StudentRegistrationForm, RegistrationForm
+from .forms import LoginForm, StudentRegistrationForm, RegistrationForm, AddSubjectForm
 
 # Create your views here.
 

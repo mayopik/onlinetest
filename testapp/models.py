@@ -15,7 +15,7 @@ class Student(models.Model):
 
 class Subject(models.Model):
     examiner=models.ForeignKey(User, on_delete=CASCADE)
-    subject_code=models.CharField(max_length=10, unique=True, primary_key=True)
+    subject_code=models.CharField(max_length=10, unique=True)
     subject_name=models.CharField(max_length=50)
 
     def __str__(self):
@@ -26,6 +26,9 @@ class Question(models.Model):
     question_text=models.TextField()
     assigned_marks=models.FloatField()
     awarded_marks=models.FloatField()
+
+    def __str__(self):
+        return self.question_text[:50]
 
 class MCQ(models.Model):
     question=models.ForeignKey(Question, on_delete=CASCADE)
