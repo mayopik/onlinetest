@@ -1,0 +1,8 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>{{ subject.subject_code }}: {{subject.subject_name }}</h1>
+<h2>Examiner: {{ subject.examiner.first_name}} {{ subject.examiner.last_name }}</h2>
+<br>
+<a href="{% url 'create_test' %}"><button>Create New Test</button></a>
+{% endblock %}

@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ STATIC_URL }}override_bootstrap.css">
   {% block title %}<title>Online Test</title>{% endblock %}
 </head>
 <body>
-    {% block header %} <h1>Online Test</h1> {% endblock %}
-    {% block content %}<!-- default content text (typically empty) -->{% endblock %}
-    {% block footer %} <h2>Created by<br>Abhiram Santhosh&emsp;Anirudh Sasi&emsp;Annapoorna Salunke</h2> {% endblock %}
+  <div class="container-fluid bg-dark text-white p-3 display-2 sticky-top">{% block header %} <h1 class="display-3">ONLINE TEST</h1> {% endblock %}</div>
+    <div class="container-fluid">{% block content %}<!-- default content text (typically empty) -->{% endblock %}</div>
+    <div class="d-flex align-items-center justify-content-center container-fluid bg-dark text-white p-3">
+      {% block footer %} <p class="lead">Created by<br>Abhiram Santhosh&emsp;Anirudh Sasi&emsp;Annapoorna Salunke</p> {% endblock %}
+    </div>
 </body>
 </html>

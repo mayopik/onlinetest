@@ -1,14 +1,31 @@
 {% extends "base_generic.html" %}
 
 {% block content %} 
-<h2>Welcome to Online Test!</h2>
-<h1>Login</h1>
-<form method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Login">
-</form>
-<a href={% url 'register' %}><button>Sign up</button></a>
+<br>
+<h2 class="display-1 text-center">Welcome to Online Test!</h2>
+<br>
+<div class="container-fluid d-flex align-items-center justify-content-center">
+    <div class="card vh-50">
+        <div class="card-body">
+            <h2 class="card-header">Login</h2>
+            <br>
+            <form method="POST">
+                {% csrf_token %}
+                <table class="m-2">
+                    {{ form.as_table }}
+                </table>
+                <input class="btn btn-primary" type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container-fluid d-flex flex-column align-items-center justify-content-center p-2">
+    <small class="display-6 m-2">OR</small>
+    <a class="m-2" href={% url 'register' %}><button class="btn btn-success">Sign up</button></a>
+</div>
+
+<br>
+<br>
+<br>
 {% endblock %}

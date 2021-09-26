@@ -1,4 +1,6 @@
 from typing import AsyncIterable
+
+from django.http.response import Http404
 from testapp.models import Student, Subject
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -81,3 +83,21 @@ def addSubject(request):
     else:
         form=AddSubjectForm()
     return render(request, 'register_student.html', context={'form':form})
+
+@login_required
+def viewSubject(request, sub_code):
+    try:
+        subject=Subject.objects.get(subject_code=sub_code)
+    except Subject.DoesNotExist:
+        raise Http404('Subject does not exist!')
+    
+    return render(request, 'view_subject.html', context={'subject':subject})
+
+@login_required
+def createTest(request, sub_code):
+    try:
+        subject=Subject.objects.get(subject_code=sub_code)
+    except Subject.DoesNotExist:
+        raise Http404('Subject does not exist!')
+    
+    

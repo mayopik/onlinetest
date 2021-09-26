@@ -34,3 +34,4 @@ class MCQ(models.Model):
     question=models.ForeignKey(Question, on_delete=CASCADE)
     options=ArrayField(models.CharField(max_length=100))
     correct_option=models.CharField(max_length=100)
+

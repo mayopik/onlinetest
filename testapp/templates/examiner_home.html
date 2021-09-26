@@ -6,9 +6,9 @@
 <br>
 <h2>Your subjects:</h2>
 {% for subject in subject_list %}
-    <button>{{ subject.subject_name }}</button><br>
+    <a href="{% url 'view_subject' subject.subject_code %}"><button>{{ subject.subject_name }}</button></a><br>
 {% endfor %}
 <br>
 <br>
-<a href={% url 'add_subject' %}><button>Add new subject</button></a>
+<a href="{% url 'add_subject' %}"><button>Add new subject</button></a>
 {% endblock %}
