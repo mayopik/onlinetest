@@ -64,7 +64,13 @@ def registerStudent(request):
 
 @login_required
 def studentHome(request):
-    return HttpResponse('<h1>STUDENT HOME PAGE<h2>')
+        context = {
+        'fname' = request.user.first_name,
+        'lname' = request.user.last_name,
+        'last_login' = request.user.last_login,
+
+    }
+    return render(request, 'student_home.html', context)
 
 @login_required
 def examinerHome(request):
