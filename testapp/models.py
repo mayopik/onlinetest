@@ -21,8 +21,16 @@ class Subject(models.Model):
     def __str__(self):
         return self.subject_name
 
-class Question(models.Model):
+class QuestionPaper(models.Model):
     subject=models.ForeignKey(Subject, on_delete=CASCADE)
+    date_time=models.DateTimeField()
+    duration=models.DurationField()
+    instructions=models.TextField()
+    pass_mark=models.FloatField()
+    max_marks=models.FloatField()
+
+class Question(models.Model):
+    question_paper=models.ForeignKey(QuestionPaper, on_delete=CASCADE)
     question_text=models.TextField()
     assigned_marks=models.FloatField()
     awarded_marks=models.FloatField()
@@ -34,4 +42,3 @@ class MCQ(models.Model):
     question=models.ForeignKey(Question, on_delete=CASCADE)
     options=ArrayField(models.CharField(max_length=100))
     correct_option=models.CharField(max_length=100)
-

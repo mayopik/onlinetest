@@ -4,7 +4,7 @@ from testapp import models
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from testapp.models import Student, Subject
+from testapp.models import QuestionPaper, Student, Subject
 
 class StudentRegistrationForm(forms.ModelForm):
     class Meta:
@@ -39,3 +39,9 @@ class AddSubjectForm(forms.ModelForm):
         model=Subject
         fields=('subject_name', 'subject_code')
         labels={'subject_name':'Name of subject', 'subject_code':'Subject Code'}
+
+class CreateTestForm(forms.ModelForm):
+    class Meta:
+        model=QuestionPaper
+        fields=('date_time', 'duration', 'instructions')
+        labels={'date_time':'Date and time of test'}

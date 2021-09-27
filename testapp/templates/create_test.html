@@ -1,0 +1,44 @@
+{% extends "base_generic.html" %}
+
+{% block content %} 
+<h1>Create a test:</h1>
+<form method="POST">
+    {% csrf_token %}
+    <!-- {{ form.non_field_errors }}
+    <div class="container">
+        <div class="row">
+           <div class='col-sm-6'>
+            {{ form.date_time.errors }}
+            <label for="{{ form.date_time.id_for_label }}">Date and time of test: </label>
+              <div class="form-group">
+                 <div class='input-group date' id='{{ form.date_time.id_for_label }}' name="date_time">
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                 </div>
+              </div>
+           </div>
+           <script type="text/javascript">
+              $(function () {
+                  $('#{{ form.date_time.id_for_label }}').datetimepicker();
+              });
+           </script>
+        </div>
+     </div>
+     <div class="">
+         {{ form.duration.errors }}
+         <label for="{{ form.duration.id_for_label }}">Duration: </label>
+         {{ form.duration }}
+     </div>
+     <div class="">
+        {{ form.instructions.errors }}
+        <label for="{{ form.instructions.id_for_label }}">Instructions: </label>
+        {{ form.instructions }}
+    </div> -->
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="SUBMIT">
+</form>
+{% endblock %}

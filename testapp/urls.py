@@ -10,5 +10,5 @@ urlpatterns=[
     path('examinerHome', views.examinerHome, name='examiner_home'),
     path('addSubject', views.addSubject, name='add_subject'),
     path('subject/<str:sub_code>',views.viewSubject, name='view_subject'),
-    path('createTest/sub_code', views.createTest, name='create_test'),
+    path('createTest/<str:sub_code>', views.createTest, name='create_test'),
 ]

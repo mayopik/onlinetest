@@ -1,13 +1,14 @@
 from typing import AsyncIterable
+import datetime
 
 from django.http.response import Http404
-from testapp.models import Student, Subject
+from testapp.models import Student, Subject, QuestionPaper
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, StudentRegistrationForm, RegistrationForm, AddSubjectForm
+from .forms import LoginForm, StudentRegistrationForm, RegistrationForm, AddSubjectForm, CreateTestForm
 
 # Create your views here.
 
@@ -19,9 +20,9 @@ def index(request):
             if user is not None:
                 login(request, user)
                 if hasattr(user, 'student'): # If user is a student
-                    return HttpResponseRedirect('studentHome')
+                    return HttpResponseRedirect(reverse('student_home'))
                 else: # if user is examiner
-                    return HttpResponseRedirect('examinerHome')
+                    return HttpResponseRedirect(reverse('examiner_home'))
             else:
                 form.add_error(None, 'Username or password is wrong')
     else:
@@ -37,9 +38,9 @@ def register(request):
             user=form.save()
             login(request, user)
             if role[0]=='Student':
-                return HttpResponseRedirect('registerStudent')
+                return HttpResponseRedirect(reverse('register_student'))
             else:
-                return HttpResponseRedirect('examinerHome')
+                return HttpResponseRedirect(reverse('examiner_home'))
     else:
             form=RegistrationForm()
     return render(request, 'register.html', context={"form":form})
@@ -50,7 +51,7 @@ def registerStudent(request):
         if form.is_valid():
             newStudent=Student(id=request.user.id, user=request.user, student_type=form.cleaned_data['student_type'])
             newStudent.save()
-            return HttpResponseRedirect('studentHome')
+            return HttpResponseRedirect(reverse('student_home'))
     else:
         form=StudentRegistrationForm()
 
@@ -79,7 +80,7 @@ def addSubject(request):
             newSubject=Subject(examiner=request.user, subject_code=form.cleaned_data['subject_code'], subject_name=form.cleaned_data['subject_name'])
             newSubject.save()
             # return HttpResponseRedirect('subject')
-            return HttpResponseRedirect('examinerHome')
+            return HttpResponseRedirect(reverse('examiner_home'))
     else:
         form=AddSubjectForm()
     return render(request, 'register_student.html', context={'form':form})
@@ -100,4 +101,12 @@ def createTest(request, sub_code):
     except Subject.DoesNotExist:
         raise Http404('Subject does not exist!')
     
-    
+    if request.method=="POST":
+        form=CreateTestForm(request.POST)
+        if form.is_valid():
+            newQPaper=QuestionPaper(subject=subject, date_time=form.cleaned_data['date_time'], duration=form.cleaned_data['duration'], instructions=form.cleaned_data['instructions'], pass_mark=0, max_marks=0)
+            newQPaper.save()
+            return HttpResponseRedirect(reverse('view_subject', args=[subject.subject_code]))
+    else:
+        form=CreateTestForm(initial={'date_time':datetime.datetime.today(), 'duration':datetime.timedelta(minutes=60)})
+    return render(request, 'create_test.html', context={'form':form})
