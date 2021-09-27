@@ -64,10 +64,10 @@ def registerStudent(request):
 
 @login_required
 def studentHome(request):
-        context = {
-        'fname' = request.user.first_name,
-        'lname' = request.user.last_name,
-        'last_login' = request.user.last_login,
+    context = {
+        'fname' : request.user.first_name,
+        'lname' : request.user.last_name,
+        'last_login' : request.user.last_login,
 
     }
     return render(request, 'student_home.html', context)
