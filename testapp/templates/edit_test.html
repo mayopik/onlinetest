@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %} 
+<h1>Edit Test:</h1>
+<div class="container">
+<div class="row">
+    {% for question in question_list %}
+        <div class="col-md-4">
+            <div class="card vh-50">
+                <div class="card-body">
+                    <h2 class="card-header">MCQ</h2>
+                    <br>
+                    <p class="lead">{{ question.question_text }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</div>
+<br>
+<a href="{% url 'add_MCQ' test.id %}?n=2"><button class="btn btn-primary">Add MCQ</button></a>
+{% endblock %}

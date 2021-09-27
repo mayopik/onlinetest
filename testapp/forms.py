@@ -4,7 +4,7 @@ from testapp import models
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from testapp.models import QuestionPaper, Student, Subject
+from testapp.models import MCQ, QuestionPaper, Student, Subject
 
 class StudentRegistrationForm(forms.ModelForm):
     class Meta:
@@ -45,3 +45,15 @@ class CreateTestForm(forms.ModelForm):
         model=QuestionPaper
         fields=('date_time', 'duration', 'instructions')
         labels={'date_time':'Date and time of test'}
+
+class AddMCQForm(forms.Form):
+    question_text=forms.CharField(widget=forms.Textarea, required=True)
+    assigned_marks=forms.IntegerField(required=True)
+    correct_option=forms.CharField(max_length=100, required=True)
+
+    def __init__(self, *args, **kwargs):
+        number_of_choices=kwargs.pop('number_of_choices')
+        super(AddMCQForm, self).__init__(*args, **kwargs)
+
+        for i in range(number_of_choices):
+            self.fields[f'option_{(i+1)}']=forms.CharField(max_length=100)

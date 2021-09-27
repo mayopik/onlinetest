@@ -1,14 +1,15 @@
 from typing import AsyncIterable
 import datetime
+from django.forms.models import model_to_dict
 
-from django.http.response import Http404
-from testapp.models import Student, Subject, QuestionPaper
+from django.http.response import Http404, HttpResponseBadRequest
+from testapp.models import Student, Subject, QuestionPaper, Question, MCQ
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, StudentRegistrationForm, RegistrationForm, AddSubjectForm, CreateTestForm
+from .forms import AddMCQForm, LoginForm, StudentRegistrationForm, RegistrationForm, AddSubjectForm, CreateTestForm, AddMCQForm
 
 # Create your views here.
 
@@ -92,7 +93,9 @@ def viewSubject(request, sub_code):
     except Subject.DoesNotExist:
         raise Http404('Subject does not exist!')
     
-    return render(request, 'view_subject.html', context={'subject':subject})
+    qpaper_list=QuestionPaper.objects.filter(subject=subject)
+    
+    return render(request, 'view_subject.html', context={'subject':subject, 'qpaper_list':qpaper_list})
 
 @login_required
 def createTest(request, sub_code):
@@ -106,7 +109,48 @@ def createTest(request, sub_code):
         if form.is_valid():
             newQPaper=QuestionPaper(subject=subject, date_time=form.cleaned_data['date_time'], duration=form.cleaned_data['duration'], instructions=form.cleaned_data['instructions'], pass_mark=0, max_marks=0)
             newQPaper.save()
-            return HttpResponseRedirect(reverse('view_subject', args=[subject.subject_code]))
+            return HttpResponseRedirect(reverse('edit_test', args=[newQPaper.id]))
     else:
         form=CreateTestForm(initial={'date_time':datetime.datetime.today(), 'duration':datetime.timedelta(minutes=60)})
     return render(request, 'create_test.html', context={'form':form})
+
+@login_required
+def editTest(request, pk):
+    try:
+        qPaper=QuestionPaper.objects.get(id=pk)
+    except QuestionPaper.DoesNotExist:
+        raise Http404('Test does not exist!')
+    
+    context=dict()
+    context['test']=qPaper
+    context['question_list']=Question.objects.filter(question_paper=qPaper)
+
+    return render(request, 'edit_test.html', context=context)
+
+@login_required
+def addMCQ(request, test_id):
+    if request.method=="POST":
+        data=request.POST.copy()
+        #return HttpResponse(data.items())
+        number_of_choices=int(data.pop('number_of_choices')[0])
+        form=AddMCQForm(data, number_of_choices=number_of_choices)
+        if form.is_valid():
+            newQuestion=Question(question_paper=QuestionPaper.objects.get(id=test_id), question_text=form.cleaned_data['question_text'], assigned_marks=form.cleaned_data['assigned_marks'])
+            newQuestion.save()
+            newMCQ=MCQ(question=newQuestion, correct_option=form.cleaned_data['correct_option'], options=[])
+            for i in range(number_of_choices):
+                newMCQ.options.append(form.cleaned_data[f'option_{(i+1)}'])
+            newMCQ.save()
+            return HttpResponseRedirect(reverse('edit_test', args=[test_id]))
+            # return HttpResponse(model_to_dict(newMCQ).items())
+    else:
+        try:
+            if int(request.GET.get('n', '2'))<2:
+                number_of_choices=2
+            else:
+                number_of_choices=int(request.GET.get('n', '2'))
+        except:
+            return HttpResponseBadRequest()
+        form=AddMCQForm(number_of_choices=number_of_choices)
+    
+    return render(request, 'add_MCQ.html', context={'form':form})

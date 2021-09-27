@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %} 
+<h1>Add MCQ question:</h1>
+<a href="{{ request.path }}?n={{ request.GET.n|add:'1'}}"><button class="btn btn-primary">Add Option</button></a>
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="hidden" name="number_of_choices" value="{{ request.GET.n }}">
+    <input type="submit" value="SUBMIT">
+</form>
+{% endblock %}

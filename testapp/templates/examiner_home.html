@@ -1,14 +1,26 @@
 {% extends "base_generic.html" %}
 
 {% block content %} 
+<br>
 <h1>EXAMINER HOME PAGE</h1>
 <h2>Hi {{ user.get_username }}</h2>
 <br>
 <h2>Your subjects:</h2>
 {% for subject in subject_list %}
-    <a href="{% url 'view_subject' subject.subject_code %}"><button>{{ subject.subject_name }}</button></a><br>
+    <a href="{% url 'view_subject' subject.subject_code %}">
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-4">
+                        <div class="btn btn-secondary">
+                            <h2>{{ subject.subject_name }}</h2>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </a><br>
 {% endfor %}
 <br>
 <br>
-<a href="{% url 'add_subject' %}"><button>Add new subject</button></a>
+<a href="{% url 'add_subject' %}"><button class="btn btn-primary">Add new subject</button></a>
+<br><br>
 {% endblock %}

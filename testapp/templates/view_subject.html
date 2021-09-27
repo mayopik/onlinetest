@@ -4,5 +4,23 @@
 <h1>{{ subject.subject_code }}: {{subject.subject_name }}</h1>
 <h2>Examiner: {{ subject.examiner.first_name}} {{ subject.examiner.last_name }}</h2>
 <br>
-<a href="{% url 'create_test' subject.subject_code %}"><button>Create New Test</button></a>
+<h2>Tests:</h2>
+<div class="container">
+    <div class="row">
+        {% for question_paper in qpaper_list %}
+            <div class="col-md-4">
+                <div class="card vh-50">
+                    <div class="card-body">
+                        <h2 class="card-header">{{ question_paper.date_time }}</h2>
+                        <br>
+                        <p class="lead">{{ question_paper.duration }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<br>
+<a href="{% url 'create_test' subject.subject_code %}"><button class="btn btn-primary">Create New Test</button></a>
+<br><br>
 {% endblock %}

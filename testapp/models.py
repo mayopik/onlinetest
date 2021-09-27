@@ -28,12 +28,13 @@ class QuestionPaper(models.Model):
     instructions=models.TextField()
     pass_mark=models.FloatField()
     max_marks=models.FloatField()
+    published=models.BooleanField(default=False)
 
 class Question(models.Model):
     question_paper=models.ForeignKey(QuestionPaper, on_delete=CASCADE)
     question_text=models.TextField()
     assigned_marks=models.FloatField()
-    awarded_marks=models.FloatField()
+    awarded_marks=models.FloatField(default=0)
 
     def __str__(self):
         return self.question_text[:50]
