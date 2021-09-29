@@ -2,14 +2,45 @@
 
 {% block content %} 
 <br>
-<h1 class="text-center">WELCOME {{ fname }} !!</h1>
+<h1 class="text-center">WELCOME {{fname}} !!</h1>
 <h2>Profile Details:</h2>
-<h3>Name: {{fname}} {{lname}} </h3>
-<h3>Last Login: {{last_login}} </h3>
+<h4>Name: {{fname}} {{lname}} </h3>
+<h4>Last Login: {{last_login}} </h3>
+<br>
+
+<h2>Registered Subjects:</h2>
 
 
+<!--
+Display already registered subject here for a student.
+{% for sub in subs %}
+	<div class="card" style="width: 18rem;">
+ 		<div class="card-body">
+    		<h5 class="card-title text-center">Subject name: {{sub.subject_name}}</h5>
+			<h5 class="card-title text-center">Subject Code: {{sub.subject_code}}</h5>
+			<h6 class="card-title text-center">Examiner: {{sub.examiner}}</h6>
+			<div class="text-center">
+    			<a href="#" class="btn btn-primary">Register</a>
+			</div>
+  		</div>
+	</div>
+	<br>
+{% endfor %}
+-->
+
+<br>
+<br>
 
 
+<div class="divider py-1 bg-info"></div>
+<div class="container">
+    <div class="text-center">
+        <form action="registernewsubject" method="post">
+            {%csrf_token%}
+            <input class="btn btn-primary" type="submit" value="Register new subject">
+        </form>
+    </div>
+</div>
 
 
 {% endblock %}

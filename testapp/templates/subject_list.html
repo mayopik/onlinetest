@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %} 
+<br>
+<div class="container">
+  <p class="display-4 text-center">Subject List</p>
+</div>
+<br>
+<br>
+<br>
+
+{% for sub in subs %}
+	<div class="card" style="width: 18rem;">
+ 		<div class="card-body">
+    		<h5 class="card-title text-center">Subject name: {{sub.subject_name}}</h5>
+			<h5 class="card-title text-center">Subject Code: {{sub.subject_code}}</h5>
+			<h6 class="card-title text-center">Examiner: {{sub.examiner}}</h6>
+			<div class="text-center">
+    			<a href="#" class="btn btn-primary">Register</a>
+			</div>
+  		</div>
+	</div>
+	<br>
+{% endfor %}
+
+
+{% endblock %}

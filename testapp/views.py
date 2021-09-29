@@ -62,6 +62,10 @@ def registerStudent(request):
 
     return render(request, 'register_student.html', context)
 
+def registernewsubject(request):
+    subs = Subject.objects.all()
+    return render(request, 'subject_list.html', { 'subs':subs})
+
 @login_required
 def studentHome(request):
     context = {
