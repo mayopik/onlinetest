@@ -3,7 +3,7 @@ import datetime
 from django.forms.models import model_to_dict
 
 from django.http.response import Http404, HttpResponseBadRequest
-from testapp.models import Student, Subject, QuestionPaper, Question, MCQ, Test
+from testapp.models import Student, Subject, QuestionPaper, Question, Subjectregistered, MCQ, Test
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -62,9 +62,22 @@ def registerStudent(request):
 
     return render(request, 'register_student.html', context)
 
+@login_required
 def registernewsubject(request):
     subs = Subject.objects.all()
-    return render(request, 'subject_list.html', { 'subs':subs})
+    subreg = Subjectregistered.objects.filter(student=request.user.student) 
+    availsub = subs.difference(subreg)
+    return render(request, 'subject_list.html', { 'subs':availsub})
+
+@login_required
+def studentsubjectreg(request, sub_code):
+    subject = Subject.objects.get(subject_code=sub_code)
+    newsubreg = Subjectregistered(student=request.user, subject=subject)
+    newsubreg.save()
+    return render(request, 'reg_succes_sub.html')
+
+
+
 
 @login_required
 def studentHome(request):
@@ -113,8 +126,6 @@ def createTest(request, sub_code):
         subject=Subject.objects.get(subject_code=sub_code)
     except Subject.DoesNotExist:
         raise Http404('Subject does not exist!')
-
-    
     
     if request.method=="POST":
         form=CreateTestForm(request.POST)
@@ -138,25 +149,6 @@ def editTest(request, pk):
     context['question_list']=Question.objects.filter(question_paper=qPaper)
 
     return render(request, 'edit_test.html', context=context)
-
-@login_required
-def result(request, pk):
-    try:
-        res=Test.objects.get(id=pk)
-    except Test.DoesNotExist:
-        raise Http404('Subject is not available')
-
-    context=dict()
-    context['sub']=res.question_paper.subject
-    context['total_marks']=res.total_marks
-
-    if(context['total_marks'] >= res.question_paper.pass_mark):
-         context['passed']=True
-
-    context['per'] = (context['total_marks']/res.question_paper.max_marks)*100
-
-    return render(request, 'result.html', context=context)
-
 
 @login_required
 def addMCQ(request, test_id):
@@ -185,3 +177,21 @@ def addMCQ(request, test_id):
         form=AddMCQForm(number_of_choices=number_of_choices)
     
     return render(request, 'add_MCQ.html', context={'form':form})
+
+@login_required
+def result(request, pk):
+    try:
+        res=Test.objects.get(id=pk)
+    except Test.DoesNotExist:
+        raise Http404('Subject is not available')
+
+    context=dict()
+    context['sub']=res.question_paper.subject
+    context['total_marks']=res.total_marks
+
+    if(context['total_marks'] >= res.question_paper.pass_mark):
+         context['passed']=True
+
+    context['per'] = (context['total_marks']/res.question_paper.max_marks)*100
+
+    return render(request, 'result.html', context=context)
