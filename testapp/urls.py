@@ -14,4 +14,5 @@ urlpatterns=[
     path('editTest/<int:pk>', views.editTest, name='edit_test',),
     path('addMCQ/<int:test_id>', views.addMCQ, name='add_MCQ'),
     path('registernewsubject', views.registernewsubject, name='registernewsubject'),
+    path('studentsubjectreg/<str:sub_code>', views.studentsubjectreg, name='studentsubjectreg'),
 ]

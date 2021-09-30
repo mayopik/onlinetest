@@ -21,6 +21,12 @@ class Subject(models.Model):
     def __str__(self):
         return self.subject_name
 
+class Subjectregistered(models.Model):
+    student = models.ForeignKey(Student, on_delete=CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=CASCADE)
+
+
+
 class QuestionPaper(models.Model):
     subject=models.ForeignKey(Subject, on_delete=CASCADE)
     date_time=models.DateTimeField()
