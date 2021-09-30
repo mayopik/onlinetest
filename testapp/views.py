@@ -3,7 +3,7 @@ import datetime
 from django.forms.models import model_to_dict
 
 from django.http.response import Http404, HttpResponseBadRequest
-from testapp.models import Student, Subject, QuestionPaper, Question, MCQ
+from testapp.models import Student, Subject, QuestionPaper, Question, MCQ, Test
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -113,6 +113,8 @@ def createTest(request, sub_code):
         subject=Subject.objects.get(subject_code=sub_code)
     except Subject.DoesNotExist:
         raise Http404('Subject does not exist!')
+
+    
     
     if request.method=="POST":
         form=CreateTestForm(request.POST)
@@ -136,6 +138,25 @@ def editTest(request, pk):
     context['question_list']=Question.objects.filter(question_paper=qPaper)
 
     return render(request, 'edit_test.html', context=context)
+
+@login_required
+def result(request, pk):
+    try:
+        res=Test.objects.get(id=pk)
+    except Test.DoesNotExist:
+        raise Http404('Subject is not available')
+
+    context=dict()
+    context['sub']=res.question_paper.subject
+    context['total_marks']=res.total_marks
+
+    if(context['total_marks'] >= res.question_paper.pass_mark):
+         context['passed']=True
+
+    context['per'] = (context['total_marks']/res.question_paper.max_marks)*100
+
+    return render(request, 'result.html', context=context)
+
 
 @login_required
 def addMCQ(request, test_id):
