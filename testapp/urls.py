@@ -15,4 +15,5 @@ urlpatterns=[
     path('result/<int:pk>', views.result, name='result'),
     path('addMCQ/<int:test_id>', views.addMCQ, name='add_MCQ'),
     path('registernewsubject', views.registernewsubject, name='registernewsubject'),
+    path('studentsubjectreg/<str:sub_code>', views.studentsubjectreg, name='studentsubjectreg'),
 ]
