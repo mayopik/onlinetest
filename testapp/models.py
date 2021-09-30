@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.base import Model
 from django.db.models.deletion import CASCADE
+from django.db.models.expressions import Case
 from django.db.models.fields import CharField
 from django.utils import tree
 from django.contrib.postgres.fields import ArrayField
@@ -49,3 +50,14 @@ class MCQ(models.Model):
     question=models.ForeignKey(Question, on_delete=CASCADE)
     options=ArrayField(models.CharField(max_length=100))
     correct_option=models.CharField(max_length=100)
+
+class Test(models.Model):
+    ''' Stores tests registered by student and total marks obtained for each. '''
+    student=models.ForeignKey(Student, on_delete=CASCADE)
+    question_paper=models.ForeignKey(QuestionPaper, on_delete=CASCADE)
+    total_marks=models.FloatField(default=-1)
+
+class StudentResponse(models.Model):
+    ''' Stores response to each question by student. '''
+    test=models.ForeignKey(Test, on_delete=CASCADE)
+    question=models.ForeignKey(Question, on_delete=CASCADE)
